@@ -12,7 +12,7 @@ The analysis of 1974 *Motor Trends* data on 32 different car models reveals that
 
 # Overview
 
-This report of the Coursera Regression Model course project explores the relationship between the mileage (called mpg - miles per gallon - hereafter) and several other parameters of a collection of cars. In particular, the project expects to answer the question if automatic or manual transmission is better for mpg and to quantify it. The data is taken from the *mtcars* data set that is available in R. This report also looks at other parameters and shows that their contribution to mileage is just as important (or even more) as the transmission system. The limit of two pages imposed by the project makes it difficult to show the complete code and its results here. Those that are interested can find the detailed version on Github at XXX. 
+This report of the Coursera Regression Model course project explores the relationship between the mileage (called mpg - miles per gallon - hereafter) and several other parameters of a collection of cars. In particular, the project expects to answer the question if automatic or manual transmission is better for mpg and to quantify it. The data is taken from the *mtcars* data set that is available in R. This report also looks at other parameters and shows that their contribution to mileage is just as important (or even more) as the transmission system. The limit of two pages imposed by the project makes it difficult to show the complete code and its results here. Those that are interested can find the [detailed version](http://github.com/RajuVarghese/RegressionModels/blob/master/detailed-report.pdf) on Github. 
 
 ```{r echo=FALSE}
 library (datasets)
