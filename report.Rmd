@@ -1,0 +1,102 @@
+---
+title: "Coursera DS Regression Models Project"
+author: "Raju Varghese"
+date: "05/23/2015"
+output: pdf_document
+classoption: a4paper
+---
+
+# Executive Summary
+
+The analysis of 1974 *Motor Trends* data on 32 different car models reveals that manually shifted cars have better gas mileage that their automatic counterparts. However, this report will show that there are other parameters that have higher correlations and must therefore be considered as well to get a well-rounded picture.
+
+# Overview
+
+This report of the Coursera Regression Model course project explores the relationship between the mileage (called mpg - miles per gallon - hereafter) and several other parameters of a collection of cars. In particular, the project expects to answer the question if automatic or manual transmission is better for mpg and to quantify it. The data is taken from the *mtcars* data set that is available in R. This report also looks at other parameters and shows that their contribution to mileage is just as important (or even more) as the transmission system. The limit of two pages imposed by the project makes it difficult to show the complete code and its results here. Those that are interested can find the detailed version on Github at XXX. 
+
+```{r echo=FALSE}
+library (datasets)
+library (ggplot2)
+```
+
+# Exploratory Analysis
+
+Figure 1 (in the appendix) clearly shows that manual cars give better mileage than automatics. During exploratory analysis it was seen that making factors out of some of the parameters made it easier to see what the actual variables were. Unfortunately, space does not permit the reproduction of that analysis here.
+
+```{r echo=F}
+data (mtcars)
+mt <- mtcars
+mt$am <- factor (mt$am, labels=c("auto", "manual"))
+mt$carb <- factor (mt$carb)
+mt$cyl <- factor (mt$cyl)
+mt$gear <- factor (mt$gear)
+mt$vs <- factor (mt$vs)
+```
+
+# Statistical Inference
+
+As the number of samples is low we shall do a t-test on the data. As we would like to be pretty sure of our conclusions we shall set the confidence interval to 99%; usually 95% is deemed good enough.
+
+```{r results='hide'}
+t <- t.test (mt [mt$am=="manual", "mpg"], mt [mt$am=="auto", "mpg"], conf.level=0.99)
+```
+
+The confidence interval range of [`r t$conf.int`] does not include 0 and the p-value of `r t$p.value`, gives a very strong indication of the effect of transmission system (automatic versus manual) on mileage. 
+
+# Linear Regression
+
+Doing a linear model fit of the transmission system gives us the result shown below.
+
+```{r}
+fit1 <- lm (mpg ~ am, data=mt)
+coef (summary (fit1))
+```
+
+The coefficients section above shows that the mean mileage of manually shifted cars are 7.25 miles per gallon higher than automatics. The signifiance codes (the 3 asterisks) at the end of the line confirms that this is an important factor. The $R^2$ value of 35.98% explains part of the variance. However, this does not say anything about the correlation - or lack thereof - of the other parameters. This prompts us to take a look at the other parameters and do a multiple regression analysis.
+
+# Multivariable Regression
+
+In order to determine which of the parameters are important in our further analysis thei correlation with mileage will be listed below with the help of the *cor* function. Please note that the absolute value of the correlation is sorted and hence it does not say whether there is a positive or negative correlation.
+
+```{r results='hide'}
+sort (abs (cor (mtcars) [1,]), decreasing=T)
+```
+
+The result shows that wt (weight), cyl (number of cylinders), disp (displacement), hp (horsepower), drat (rear axle ratio) and vs (v or straight engine) have a higher correlation than the transmission system. Please refer to Figure 2 in the appendix to view the above data graphically. We therefore do multivariable regression on those to get a best fit. For that we take an initial model with all parameters and then *step* through them taking combinations in order to find the best one.
+
+```{r}
+initialFit <- lm (mpg ~ ., data = mt)
+bestFit <- step (initialFit, direction = "both", trace=0)
+summary (bestFit)
+```
+
+This shows that the cylinder (cyl), horsepower (hp), weight (wt) and transmission (am) give the best fit. With an $R^2$ value of 0.84 this looks a very good combination in the choice of a multivariable linear model. Diagnostics and residual plots are in figure 3 in the appendix.
+
+# Appendix
+
+This part contains graphic plots as permitted in the project specification of the course.
+
+## Figure 1: Boxplot of mileage by transmission type
+
+```{r}
+p <- ggplot(mt, aes(factor (am), mpg))
+p + geom_boxplot(aes (fill=factor (am))) + geom_jitter()
+
+```
+
+## Figure 2: Correlation plot of all parameters
+
+```{r}
+library (corrgram)
+corrgram(mtcars, order=TRUE, lower.panel=panel.shade,
+         upper.panel=panel.pie, text.panel=panel.txt,
+         main="Car Mileage Data")
+```
+
+## Figure 3: Diagnostics and Residual Data
+
+```{r}
+par (mfrow=c(2,2))
+plot (bestFit)
+```
+
