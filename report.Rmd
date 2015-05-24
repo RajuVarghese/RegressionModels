@@ -1,7 +1,7 @@
 ---
 title: "Coursera DS Regression Models Project"
 author: "Raju Varghese"
-date: "05/23/2015"
+date: "05/24/2015"
 output: pdf_document
 classoption: a4paper
 ---
@@ -21,7 +21,7 @@ library (ggplot2)
 
 # Exploratory Analysis
 
-Figure 1 (in the appendix) clearly shows that manual cars give better mileage than automatics. During exploratory analysis it was seen that making factors out of some of the parameters made it easier to see what the actual variables were. Unfortunately, space does not permit the reproduction of that analysis here.
+To examine the contents of the mtcars data frame *str*, *summary* functions were invoked and plots were made. Figure 1 (in the appendix) clearly shows that manual cars give better mileage than automatics. During exploratory analysis it was seen that making factors out of some of the parameters made it easier to see what the actual variables were. Unfortunately, space does not permit the reproduction of that analysis here.
 
 ```{r echo=F}
 data (mtcars)
@@ -70,7 +70,7 @@ bestFit <- step (initialFit, direction = "both", trace=0)
 summary (bestFit)
 ```
 
-This shows that the cylinder (cyl), horsepower (hp), weight (wt) and transmission (am) give the best fit. With an $R^2$ value of 0.84 this looks a very good combination in the choice of a multivariable linear model. Diagnostics and residual plots are in figure 3 in the appendix.
+This shows that the cylinder (cyl), horsepower (hp), weight (wt) and transmission (am) give the best fit. With an $R^2$ value of 0.84 this looks a very good combination in the choice of a multivariable linear model. Diagnostics and residual plots are in figure 3 in the appendix. Due to space constaints the *anova* result comparing *fit1* to *bestFit* is not shown here; the [detailed version](http://github.com/RajuVarghese/RegressionModels/blob/master/detailed-report.pdf) has that and more.
 
 # Appendix
 
